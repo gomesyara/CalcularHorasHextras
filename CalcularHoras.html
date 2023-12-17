@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ionic/core/css/ionic.bundle.css" />
+    <!-- <script src="./buscar.js" defer></script> -->
+    <title>Calcular horas extras</title>
+</head>
+<!-- <script>
+    var valor1, valor2, hT,horasTrabalhadas;
+    const h1 = 
+    valor1 = parseInt(prompt("Insira o horario de entrada"));
+    valor2 = parseInt(prompt("Insira o horario de saida"));
+    horasTrabalhadas = valor2 - valor1;
+    function numeroDeHorasTrabalhadas(horasTrabalhadas){
+        if(horasTrabalhadas>9){
+                hT = horasTrabalhadas/100;
+            return "Tempo de Trabalho"+ horasTrabalhadas + "\n" + hT;
+            
+        }else{
+                return "Tempo de Trabalho" + horasTrabalhadas;
+            }
+    }
+    
+    //alert(valor1>=0 & valor2>=0?valor2-valor1 : "valores invalidos");
+</script> -->
+
+<body>
+    <ion-app>
+        <ion-header>
+            <ion-toolbar>
+                <ion-title>Calculando horas extras</ion-title>
+            </ion-toolbar>
+        </ion-header>
+        <ion-content>
+            <ion-card>
+                <ion-card-content>
+                    <ion-list>
+                        <ion-item>
+                            <ion-label position="floating">Horario de entrada:</ion-label><br>
+                            <ion-input type="time" id="horarioEntrada"></ion-input>
+                        </ion-item>
+
+                        <ion-item>
+                            <ion-label position="floating">Horario de saida:</ion-label><br>
+                            <ion-input type="time" id="horarioSaida"></ion-input>
+                        </ion-item>
+                        <ion-item>
+                            <ion-label position="floating">Data:</ion-label><br>
+                            <ion-input type="Date" id="diaT"></ion-input>
+                        </ion-item>
+                    </ion-list>
+
+                    <div class="ion-text-center" class="ion-margin-">
+                        <ion-button id="btn-calcular" shape="round" fill="outline"> Calcular </ion-button>
+                    </div>
+                </ion-card-content>
+            </ion-card>
+            <ion-card-content>
+                <ion-list>
+                    <ion-item>
+                        <ion-label>Horas trabalhadas:</ion-label>
+                        <ion-input id="horasTrabalhadas" readonly></ion-input>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label>Horas extras:</ion-label>
+                        <ion-input id="horasExtras" readonly></ion-input>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label>Valor de horas extras:</ion-label>
+                        <ion-input id="valorHorasExtras" readonly></ion-input>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label>Banco de horas: </ion-label>
+                        <ion-input id="bancoDeHoras" readonly></ion-input>
+                    </ion-item>
+                </ion-list>
+            </ion-card-content>
+            <ion-card>
+                <ion-card-content>
+                    <div id="dia">Dados do dia: </div>
+                </ion-card-content>
+            </ion-card>
+
+        </ion-content>
+    </ion-app>
+</body>
+<script defer>
+    // Campos de entrada de dados
+    const btnCalcularHoras = document.getElementById("btn-calcular");
+    const horaEntrada = document.getElementById("horarioEntrada");
+    const horarioSaida = document.getElementById("horarioSaida");
+    const ValorHoras = document.getElementById("valorHorasExtras");
+    
+    // campos de exibição
+    const horasTrabalhadas = document.getElementById("horasTrabalhadas");
+    const horasExtras = document.getElementById("horasExtras");
+    const horarioAtual = new Date();
+
+
+   
+
+
+    btnCalcularHoras.addEventListener('click', () => {
+        //HORARIO DE ENTRADA----------------------------------------------
+        let horaEntradaH = horarioEntrada.value.split(':')[0];
+        let horaEntradaM = horarioEntrada.value.split(':')[1];
+
+        //Total de segundo Da hora de entrada
+        let totalSecondsEntrada = parseInt(horaEntradaH) * 3600 + parseInt(horaEntradaM) * 60;
+        console.log("Total de segundos entrada: " + totalSecondsEntrada);
+
+        // horario do total de segundos
+        let horaEntradaS = Math.floor(totalSecondsEntrada / 3600); // calcula as horas
+        let horaEntradaSS = Math.floor((totalSecondsEntrada % 3600) / 60); // calcula os minutos
+
+        //adicionando 0 caso a hora seja menor que 10
+        if (horaEntradaS < 10) {
+            horaEntradaS = "0" + horaEntradaS;
+        }
+        if (horaEntradaSS < 10) {
+            horaEntradaSS = "0" + horaEntradaSS;
+        }
+        let timeStringEntrada = horaEntradaS + ":" + horaEntradaSS;
+        console.log("horario:" + timeStringEntrada);
+
+
+        //HORARIO SAIDA-------------------------------------------
+        let horaSaidaH = horarioSaida.value.split(':')[0];
+        let horaSaidaM = horarioSaida.value.split(':')[1];
+
+        let horaSaida = (horaSaidaH) + horaSaidaM;
+        console.log(horaSaida);
+
+        //total de segundos da hora de saida
+        let totalSecondsSaida = parseInt(horaSaidaH) * 3600 + parseInt(horaSaidaM) * 60;
+        console.log("Total de segundos saida: " + totalSecondsSaida);
+
+        //horario do total de segundos
+        let horaSaidaS = Math.floor(totalSecondsSaida / 3600);//Calcula as horas
+        let horaSaidaSS = Math.floor((totalSecondsSaida % 3600) / 60); // calcula os minutos
+
+        //adicionando 0 caso a hora seja menor que 10
+        if (horaSaidaS < 10) {
+            horaSaidaS = "0" + horaSaidaS;
+        }
+        if (horaSaidaSS < 10) {
+            horaSaidaSS = "0" + horaSaidaSS;
+        }
+        let timeStringSaida = horaSaidaS + ":" + horaSaidaSS;
+        console.log("horario:" + timeStringSaida);
+
+        //HORARIO DE ALMOÇO
+
+        calcularHorasTrabalhadas(totalSecondsEntrada, totalSecondsSaida);
+
+    });
+
+
+
+    async function calcularHorasTrabalhadas(totalSecondsEntrada, totalSecondsSaida) {
+
+        let segundostrabalhados = (totalSecondsSaida - totalSecondsEntrada) - (3600 + 3600);
+        let totalhoraTrabalhada = Math.floor(segundostrabalhados / 3600);//Calcula as horas sobre os segundos trabalhados
+        let totalminutoTrabalhado = Math.floor((segundostrabalhados % 3600) / 60);//calcula os minutos sobre os segundos trabalhados
+
+        if (totalhoraTrabalhada < 10) {
+            totalhoraTrabalhada = "0" + totalhoraTrabalhada;
+        }
+        if (totalminutoTrabalhado < 10) {
+            totalminutoTrabalhado = "0" + totalminutoTrabalhado;
+        }
+        let timeStringTotal = totalhoraTrabalhada + ":" + totalminutoTrabalhado;
+        console.log("horas trabalhadas:" + timeStringTotal);
+        horasTrabalhadas.value = timeStringTotal;
+        calulcarHorasExtras(segundostrabalhados);
+    }
+    async function calulcarHorasExtras(segundostrabalhados) {
+        if (segundostrabalhados > 25200) {
+            let adicionalDeHoras = segundostrabalhados - (25200 + 3600);//25200 = 8horas de trabalho -- 1500 = 1hora de trabalho = almoço
+            console.log("Segundos extras: " + adicionalDeHoras);
+
+            var horaHextra = Math.floor(adicionalDeHoras / 3600);//Calcula as horas sobre o segundos do adicional de horas
+            let minutosextras = Math.floor((adicionalDeHoras % 3600) / 60);//calcula os minutos sobre os segundos de adicional de horas
+
+            if (horaHextra < 10) {
+                horaHextra = "0" + horaHextra;
+            }
+            if (minutosextras < 10) {
+                minutosextras = "0" + minutosextras;
+            }
+
+            let horaAdicional = horaHextra + ":" + minutosextras;
+            console.log("horas Extras: " + horaAdicional);
+
+
+            horasExtras.value = horaAdicional;
+        } else if (segundostrabalhados <= 25200) {
+            horasExtras.value = 0;
+        } else {
+            horasExtras.value = "Erro";
+        }
+        calcularValorDeHorasExtras(horaHextra);
+    }
+    async function calcularValorDeHorasExtras(horaHextra) {
+        let salarioHora = 12.50;
+        let diaUtil = 0.5;
+        let diaNUtil = 1.0;
+        let valorMetade = salarioHora + (salarioHora * diaUtil);
+        let valorInteiro = salarioHora + (salarioHora * diaNUtil);
+        let valorHoraExtraMetade = valorMetade * horaHextra;
+        let valorHoraExtraInteiro = valorInteiro * horaHextra;
+        console.log("Valor Hora Extra 50%:" + valorHoraExtraMetade);
+        console.log("Valor Hora Extra 100%:" + valorHoraExtraInteiro);
+        
+        localStorage.setItem("salario", valorHoraExtraMetade);
+        let salario = localStorage.getItem("salario"); // obtém o valor armazenado na chave "nome" do localStorage e armazena-o em uma variável
+        console.log(salario);
+
+         //Dia atual
+
+    let dataAtual = new Date(); // cria um objeto Date com a data e hora atuais
+    let opcoes = { timeZone: 'America/Sao_Paulo', day: 'numeric', month: 'numeric', year: 'numeric' }; // define as opções de formatação e o fuso horário
+    let dataFormatada = dataAtual.toLocaleDateString('pt-BR', opcoes); // formata a data atual de acordo com as opções
+    console.log("A data atual no Brasil é: " + dataFormatada); // exibe a data formatada no console
+        
+    armazenarDados();
+    }
+    async function armazenarDados(){
+        let meuDado = document.getElementById("diaT").value;
+        localStorage.setItem("meuDado", meuDado);
+
+        let meuDado1 = localStorage.getItem("meuDado");
+        document.getElementById("dia").innerHTML = meuDado1;
+        
+        //diaT
+        // exibe o valor na página
+        
+    }
+    // let meuDado = document.getElementById("meuCampo").value;
+    // localStorage.setItem("meuDado", meuDado);
+//Recebendo horario atual
+// setTimeout(function () {
+//         console.log(horarioAtual.getHours()+":"+horarioAtual.getMinutes());
+//     }, 100);
+</script>
+
+</html>
